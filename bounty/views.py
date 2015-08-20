@@ -18,13 +18,13 @@ from django.contrib.auth.models import User
 
 from django.core import serializers
 
-from bounty.models import Bounty, BountyItem, Address, ChowBountyUser
-from bounty.forms import WorldBorderForm
+from bounty.models import Bounty, BountyItem, ChowBountyUser
+#from bounty.forms import WorldBorderForm
 
 from bounty.serializers import BountySerializer
 
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
+#from django.contrib.gis.geos import Point
+#from django.contrib.gis.measure import D
 
 from django.core import serializers
 
@@ -45,8 +45,8 @@ def new_bounty(request):
 
 def show_bounty(request, bounty_id):
     bounty = Bounty.objects.get(pk = bounty_id)
-    form = WorldBorderForm()
-    return render(request, 'bounty/showbounty.html', {'form': form, 'bounty_items' :  BountyItem.objects.filter(bounty = bounty)})
+#    form = WorldBorderForm()
+    return render(request, 'bounty/showbounty.html', {'bounty_items' :  BountyItem.objects.filter(bounty = bounty)})
 
 def list_bounties(request):
     return render(request, 'bounty/localbounties.html', {})
@@ -64,7 +64,8 @@ def local_bounties(request):
     lng = request.GET['lng']
     pnt = Point(float(lat), float(lng))
     
-    local_bounty_list = Bounty.objects.filter(coordinates__distance_lte=(pnt, D(mi = miles))).distance(pnt).order_by('distance')
+    local_bounty_list = Bounty.objects.all()
+#    local_bounty_list = Bounty.objects.filter(coordinates__distance_lte=(pnt, D(mi = miles))).distance(pnt).order_by('distance')
 
     data = serializers.serialize("json", local_bounty_list)
     
@@ -72,11 +73,11 @@ def local_bounties(request):
     items = []
     
     for bounty in local_bounty_list:
-        dist = []
-        dist.append(bounty.coordinates.distance(pnt))
-        dist.append(bounty.address.zipcode_str)
-        dist.append(bounty.address.street)
-        dists.append(dist)
+#        dist = []
+#        dist.append(bounty.coordinates.distance(pnt))
+#        dist.append(bounty.address.zipcode_str)
+#        dist.append(bounty.address.street)
+#        dists.append(dist)
         bounty_items = []
         for bountyItem in  BountyItem.objects.filter(bounty = bounty):
             item_str = bountyItem.item_name + " x" + str(bountyItem.item_quantity)
@@ -90,9 +91,10 @@ def default_bounties(request):
     miles = request.GET['miles']
     u = get_user(request)
     cb = ChowBountyUser.objects.get(user = u)    
-    pnt = cb.coordinates
+#    pnt = cb.coordinates
     
-    local_bounty_list = Bounty.objects.filter(coordinates__distance_lte=(pnt, D(mi = miles))).distance(pnt).order_by('distance')
+    local_bounty_list = Bounty.objects.all()
+#    local_bounty_list = Bounty.objects.filter(coordinates__distance_lte=(pnt, D(mi = miles))).distance(pnt).order_by('distance')
 
     data = serializers.serialize("json", local_bounty_list)
     
@@ -135,23 +137,23 @@ def edit_address(request):
     return render(request, 'bounty/edit_address.html', {})
 
 def save_address(request):
-    u = get_user(request)
-    line1 = request.POST['line1']
-    line2 = request.POST['line2']
-    city = request.POST['city']
-    state = request.POST['state']
-    zip_code = request.POST['zip']
-    cb = ChowBountyUser.objects.get(user = u)
-    address = cb.address
-    if address == None:
-        address = Address(line1 = line1, line2 = line2, city = city, state = state, zipcode_str = zip_code)
-    else:
-        address.line1 = line1
-        address.line2 = line2
-        address.city = city
-        address.state = state
-        address.zipcode_str = zip_code
-    address.save()
-    cb.address = address
-    cb.save()
-    return HttpResponse(address)
+#    u = get_user(request)
+#    line1 = request.POST['line1']
+#    line2 = request.POST['line2']
+#    city = request.POST['city']
+#    state = request.POST['state']
+#    zip_code = request.POST['zip']
+#    cb = ChowBountyUser.objects.get(user = u)
+#    address = cb.address
+#    if address == None:
+#        address = Address(line1 = line1, line2 = line2, city = city, state = state, zipcode_str = zip_code)
+#    else:
+#        address.line1 = line1
+#        address.line2 = line2
+#        address.city = city
+#        address.state = state
+#        address.zipcode_str = zip_code
+#    address.save()
+#    cb.address = address
+#    cb.save()
+    return HttpResponse(1)

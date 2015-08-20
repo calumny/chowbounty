@@ -35,10 +35,10 @@ def login_form(request):
             login(request, user)
             
             cb = ChowBountyUser.objects.get(user = user)
-            if cb.address == None:
-                return HttpResponseRedirect(reverse('bounty:edit_address'))
-            else:
-                return HttpResponseRedirect(reverse('front:index'))
+#            if cb.address == None:
+#                return HttpResponseRedirect(reverse('bounty:edit_address'))
+#            else:
+            return HttpResponseRedirect(reverse('front:index'))
             # Redirect to a success page.
         else:
             return HttpResponseRedirect(reverse('front:index'))

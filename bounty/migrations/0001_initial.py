@@ -16,13 +16,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Bounty',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('creation_date', models.DateTimeField(verbose_name='date created', default=datetime.datetime(2015, 6, 10, 15, 1, 51, 492833))),
-                ('expiration_date', models.DateTimeField(verbose_name='expiration date', default=datetime.datetime(2015, 6, 17, 15, 1, 51, 492833))),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('price', models.DecimalField(decimal_places=2, default=5.0, max_digits=6)),
+                ('creation_date', models.DateTimeField(verbose_name='date created', default=datetime.datetime.now)),
+                ('expiration_date', models.DateTimeField(verbose_name='expiration date', null=True)),
+                ('item_count', models.IntegerField(default=0)),
                 ('is_saved', models.BooleanField(default=False)),
                 ('is_claimed', models.BooleanField(default=False)),
                 ('is_requested', models.BooleanField(default=False)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
@@ -31,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BountyItem',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('item_name', models.CharField(max_length=100)),
                 ('item_quantity', models.IntegerField(default=1)),
                 ('image_link', models.CharField(default='', max_length=200)),
@@ -41,5 +42,34 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ChowBountyUser',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('special_instructions', models.CharField(max_length=100)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Vendor',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=50)),
+                ('lon', models.FloatField()),
+                ('lat', models.FloatField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='bounty',
+            name='cb_user',
+            field=models.ForeignKey(to='bounty.ChowBountyUser'),
+            preserve_default=True,
         ),
     ]
