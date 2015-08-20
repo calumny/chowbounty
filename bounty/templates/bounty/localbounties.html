@@ -1,0 +1,121 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script type="text/javascript" src="{% static 'spin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.qrcode.min.js' %}"></script>
+    {{ form.media }}
+
+
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<title>Classic parallax page</title>
+
+    <script>
+        
+        function getBounties(position) {
+              $.ajax({
+                       type: "GET",
+                       url: "{% url 'bounty:local_bounties' %}",
+                       data: {'csrfmiddlewaretoken': '{{csrf_token}}', 'lat':  position.coords.latitude, 'lng':  position.coords.longitude, 'miles': '5'},
+                       dataType: "json",
+                       success: function(response) {
+                           var bounties = JSON.parse(response["bounties"]);
+                           var dists = response["distances"];
+                           var items = response["items"];
+                           for (var i = 0; i < bounties.length; i ++) {
+                               var itemString = "";
+                               var bountyItems = items[i];
+                               for (var item in bountyItems) {
+                                    itemString += bountyItems[item] + ", "; 
+                               }
+                               itemString = itemString.replace(/ x1,/g, ',');
+                               itemString = itemString.replace(/, $/, '');
+                               var expir = new Date(bounties[i]["fields"]["expiration_date"]);
+                               var expir_date = Math.floor(expir/86400000);
+                               var today = new Date();
+                               var today_date = Math.floor(today/86400000);
+                               var diffDays = (expir_date - today_date);
+                               diffDays ++;
+                               var exp_string;
+                               if ((expir - today) < 1000*60*60) {
+                                   exp_string = "Exp: <1 hour
+                               } else if ((expir - today) < 1000*60*60*12) {
+                                   var hours = Math.floor(1000*60*60*12);
+                                   exp_string = "Exp: <" + hours + " hours";
+                               } else if (diffDays < 1) {
+                                   exp_string = "Exp: Today";
+                               } else if (diffDays == 1) {
+                                   exp_string = "Exp: in 1 day";
+                               } else {
+                                   exp_string = "Exp: " + diffDays + " days";
+                               }
+                               $("#bounties").append(
+                                    $('<div class="bountyWrapper">').append(
+                                        $('<div class="bounty">').append(
+                                            $('<div class="claimBounty">').append(
+                                                $('<div class="previewExp">').append(exp_string)
+                                            ).append("<h2>CLAIM</h2>")   
+                                        ).append(
+                                            $('<div class="previewPrice">').append("$" + bounties[i]["fields"]["price"])
+                                        ).append(
+                                            $('<div class="previewStreet">').append(dists[i][2])
+                                        ).append(
+                                            $('<div class="previewZip">').append(dists[i][1])
+                                        ).append(
+                                            $('<div class="count">').append(bounties[i]["fields"]["item_count"] + " items")
+                                        ).append(
+                                            $('<div class="itemListPreview">').append(itemString)
+                                        )
+                                    )
+                               );
+                           }
+                        },
+                        error: function(rs, e) {
+                               alert(rs.responseText);
+                        }
+                  }); 
+        }
+        function getDefaultBounties() {
+              $.ajax({
+                       type: "GET",
+                       url: "{% url 'bounty:default_bounties' %}",
+                       data: {'csrfmiddlewaretoken': '{{csrf_token}}', 'miles': '5'},
+                       dataType: "json",
+                       success: function(response) {
+                           for (var i = 0; i < response.length; i ++) {
+                               $("#bounties").append(
+                                    $('<div class="bounty">').append(response[i]["fields"]["price"])   
+                               );
+                           }
+                        },
+                        error: function(rs, e) {
+                               alert(rs.responseText);
+                        }
+                  }); 
+        }
+        
+          $(document).ready(function() {
+              $('#qrcode').qrcode("this plugin is great");
+              
+                if (navigator.geolocation) {    
+                     navigator.geolocation.getCurrentPosition(getBounties);
+
+                // Browser supports it, we're good to go!     
+                } else {    
+                    getDefaultBounties();
+                }
+              
+          });
+    </script>
+</head>
+
+<body>
+    <div id="bounties">
+    </div>
+</body>

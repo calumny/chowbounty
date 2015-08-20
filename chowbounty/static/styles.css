@@ -1,0 +1,303 @@
+.colors {
+    background-color: #d8e6e4;
+    background-color: #4885a8;
+    background-color: #1b2138;
+    background-color: #39b539;
+    background-color: #aeba73;
+    background-color: #e3d8a8;
+}
+
+body {
+    font-family: "Merriweather", Helvetica, Arial, sans-serif;
+//    background-color: #d3d7e3;
+//    background-color: #5D4157;
+    background-color: #FFFFFF;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+
+a {
+    text-decoration: none;
+    color: #333333;
+}
+
+li {
+    list-style: none;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #E9E9E9; /* old IE */
+    background-color: #E9E9E9; /* Modern Browsers */
+}
+
+input[type="text"] {
+    border: 1px solid #39b539;
+}
+
+#centerColumn {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 100px;
+    min-height: 100%;
+    padding: 10px;
+}
+
+#bounties {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 100px;
+    border-radius: 5px;
+//    border: 1px solid #626670;
+//    border-color: #626670;
+//    background-color: #e9f7f5;
+    min-height: 100%;
+    padding: 10px;
+}
+
+.bounty {
+    width: 100%;
+    border-top: 1px solid #718784;
+    border-bottom: 1px solid #718784;
+//    border-radius: 5px;
+//    border: 1px solid #718784;
+    background-color: #d3d7e3;
+    margin-bottom: 10px;
+    float:left;
+    height: 75px;
+    padding: 5px;
+}
+
+.bounty .previewPrice {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4885a8;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    float: left;
+}
+
+.bounty .previewStreet {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #4885a8;
+//    color: #d3d7e3;
+    margin-bottom: 0px;
+    margin-left: 30px;
+//    margin-right: 30px;
+    float: left;    
+}
+
+.bounty .previewZip {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #4885a8;
+//    color: #d3d7e3;
+    margin-bottom: 0px;
+    margin-left: 30px;
+    margin-right: 30px;
+    float: left;    
+}
+
+.bounty .previewExp {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 700;
+//    color: #d3d7e3;
+    margin-bottom: 0px;
+}
+
+.bounty .count {
+//    color: #d3d7e3;
+    float: left;
+    clear: left;
+    margin-top: 20px;
+    margin-left: 10px;
+    
+}
+
+.bounty  .itemListPreview {
+//    color: #d3d7e3;
+    margin-top: 20px;
+    margin-left: 40px;
+    float: left;    
+}
+
+.claimBounty {
+    color: #d3d7e3;
+    background-color: #4885a8;
+//    padding: 10px;
+    padding-left: 10px;
+    width: 140px;
+    border-left: 1px dashed #FFFFFF;
+//    border-radius: 2px;
+    float: right;
+    display: inline;
+    height: 85px;
+    margin-top: -5px;
+    margin-right: -5px;    
+}
+
+.claimBounty h2 {
+    text-align: center;
+}
+
+.paddingDiv {
+    padding: 5px;   
+    margin: 0px;
+    height: 100%;
+}
+
+.textPaddingDiv {
+    padding: 20px;  
+    margin: 0px;
+//    height: 100%
+}
+
+.popupFormBorder{
+    z-index: 2;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+}
+
+.popupForm {
+    background-color: #4885a8;
+    border: 1px solid #1b2138;
+    border-radius: 3px;
+//    width: 800px;
+    left: 50%;
+    top: 15%;
+//    margin-left:-400px;
+//    margin-top:-400px;
+    position: relative;
+    padding: 20px;
+}
+
+.popupForm h2 {
+    margin-top: 0px;
+}
+
+.popupForm h3 {
+    margin-top: 0px;
+}
+
+.popupForm h4 {
+    margin-top: 0px;
+//    margin-bottom: 0px;
+}
+
+.popupForm input[type="submit"] {
+    width: 49%;
+    padding: 5px;
+    font-size: 16px;
+    color: #F9F9F9;
+    background: #65B0D3;
+    border-radius: 3px;
+    border: 1px solid #C9C9C9;
+    margin: 10px;
+    margin-left: 0px;
+    margin-bottom: 20px;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    clear: left;
+}
+
+button.cancel {
+    border: none;
+    background: none;
+}
+
+.popupForm input[type="submit"]:hover {
+    color: #F9F9F9;
+    background: #248fc1;
+}
+
+.bountyForm input[type="button"] {
+    clear: both;
+    float: left;
+    margin: 5px;
+}
+
+.bountyForm input[type="text"] {
+    float: left;
+    width: 50%;
+    font-size: 22px;   
+    margin: 5px;
+    margin-top: 0px;
+}
+
+
+.bountyForm input[type="number"] {
+    width: 50px;
+    float: left;
+    font-size: 20px;   
+}
+
+#bountyDate {
+    float: left;
+    clear: left;
+    width: 200px;   
+}
+
+#bountyTime {
+    float: left;
+    width: 100px;
+}
+
+#bountyAddressOption {
+    float: left;
+    clear: left;
+    font-size: 22px;   
+    margin-left: 5px;
+    width: 200px;   
+}
+
+#bountyAddress {
+    float: left;
+    clear: left;
+    display: none;
+}
+
+.popupForm select {
+    min-width: 90%;
+    font-size: 20px;
+    display: block;
+}
+
+.account{
+    padding: 10px;
+    position: absolute;   
+    top: 20px;
+    right: 20px;
+}
+
+.account img {
+    float: left;
+}
+
+.account .username {
+    float: left;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+
+.account form{
+    //float: right;
+    //position: absolute;   
+  //  display: none;
+    margin-top: -30px;
+}
+

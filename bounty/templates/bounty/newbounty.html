@@ -1,0 +1,179 @@
+{% load staticfiles %}
+
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'jquery-ui.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'jquery.timepicker.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script type="text/javascript" src="{% static 'spin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.timepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui.js' %}"></script>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<title>Classic parallax page</title>
+
+    <script>
+        
+        
+        
+        function setInputListeners() {
+              $(".itemName").on("input", function() {
+                  var newInput = true;
+                  $(".itemName").each(function() {
+                     if ($(this).val().trim() == "") {
+                         newInput = false;
+                     }
+                  });
+                  if (newInput) {
+                    $("#bountyDate").before(
+                        $('<input class="itemName" type="text">')
+                    );
+                    $("#bountyDate").before(
+                        $('<input type="number" name="quantity" min="1" value="1">')
+                    );
+                      setInputListeners();
+                  }
+              });            
+        }
+          
+          $(document).ready(function() {
+              setInputListeners();
+              $("#bountyDate").datepicker({
+                  minDate: new Date(),
+                  defaultDate: new Date()
+              });
+              var today = new Date();
+              var nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+              $("#bountyDate").datepicker("setDate", nextWeek);
+              $('#bountyTime').timepicker({ 'scrollDefault': 'now' });
+              $('#bountyTime').timepicker('setTime', new Date());
+              $(".createBounty").on("click", function() {
+                    submitBounty(); 
+              });
+              $("#bountyAddressOption").on("change", function() {
+                  if ($("#bountyAddressOption").val() == "newAddress") {
+                        $("#bountyAddress").show(); 
+                  } else {
+                        $("#bountyAddress").hide();    
+                  }
+              });
+          });
+        
+        
+        function submitBounty() {
+            var itemList = {};
+            
+                  $(".itemName").each(function() {
+                      if ($(this).val().trim().length > 0 ) {
+                          itemList[$(this).val()] = $(this).next().val();
+                      }
+                  });
+                  $.ajax({
+                           type: "POST",
+                           url: "{% url 'bounty:add_bounty' %}",
+                           data: {'items': JSON.stringify(itemList),  'csrfmiddlewaretoken': '{{csrf_token}}', 'date' : $("#bountyDate").val(), 'time' : $("#bountyTime").val()},
+                           dataType: "json",
+                           success: function(response) {
+                               window.location.href = "/bounty/" + response;
+//                               alert(JSON.stringify(response));
+                            },
+                            error: function(rs, e) {
+                                   alert(rs.responseText);
+                            }
+                      });   
+   
+        }
+              
+    </script>
+</head>
+
+<body>
+    
+    
+    <div id="centerColumn">
+                <form class="bountyForm" id="bountyForm">{% csrf_token %}<h3>New Bounty</h3>
+                    <h4>Item</h4>
+                    <input class="itemName" type="text"/><input class="itemQuantity" type="number" name="quantity" min="1" value="1">
+                    <input id="bountyDate" type="text">
+                    <input id="bountyTime" type="text">
+                    <select id="bountyAddressOption">
+                        <option value="myAddress">My Address</option>
+                        <option value="newAddress">New Address</option>
+                        <option value="currentLocation">Current Location</option>
+                    </select>
+<div id="bountyAddress">
+    <h3>Enter Address</h3>
+                    <h4>Line 1</h4>
+                    <input class="itemName" type="text" name="line1" required/>
+                    <h4>Line 2</h4>
+                    <input class="itemName" type="text" name="line2"/>
+                    <h4>City</h4>
+                    <input class="itemName" type="text" name="city" required/>
+                    <h4>State</h4>
+                    <select name="state" size="1" required>
+                      <option value="AK">AK</option>
+                      <option value="AL">AL</option>
+                      <option value="AR">AR</option>
+                      <option value="AZ">AZ</option>
+                      <option value="CA">CA</option>
+                      <option value="CO">CO</option>
+                      <option value="CT">CT</option>
+                      <option value="DC">DC</option>
+                      <option value="DE">DE</option>
+                      <option value="FL">FL</option>
+                      <option value="GA">GA</option>
+                      <option value="HI">HI</option>
+                      <option value="IA">IA</option>
+                      <option value="ID">ID</option>
+                      <option value="IL">IL</option>
+                      <option value="IN">IN</option>
+                      <option value="KS">KS</option>
+                      <option value="KY">KY</option>
+                      <option value="LA">LA</option>
+                      <option value="MA">MA</option>
+                      <option value="MD">MD</option>
+                      <option value="ME">ME</option>
+                      <option value="MI">MI</option>
+                      <option value="MN">MN</option>
+                      <option value="MO">MO</option>
+                      <option value="MS">MS</option>
+                      <option value="MT">MT</option>
+                      <option value="NC">NC</option>
+                      <option value="ND">ND</option>
+                      <option value="NE">NE</option>
+                      <option value="NH">NH</option>
+                      <option value="NJ">NJ</option>
+                      <option value="NM">NM</option>
+                      <option value="NV">NV</option>
+                      <option value="NY">NY</option>
+                      <option value="OH">OH</option>
+                      <option value="OK">OK</option>
+                      <option value="OR">OR</option>
+                      <option value="PA">PA</option>
+                      <option value="RI">RI</option>
+                      <option value="SC">SC</option>
+                      <option value="SD">SD</option>
+                      <option value="TN">TN</option>
+                      <option value="TX">TX</option>
+                      <option value="UT">UT</option>
+                      <option value="VA">VA</option>
+                      <option value="VT">VT</option>
+                      <option value="WA">WA</option>
+                      <option value="WI">WI</option>
+                      <option value="WV">WV</option>
+                      <option value="WY">WY</option>
+                    </select>
+                    <h4>Zip</h4>
+                    <input class="itemName" type="text" name="zip" required/>
+                    </div>
+
+                    <input class="createBounty" type="button" value="Create Bounty">
+                </form>
+    </div>
+    
+</body>

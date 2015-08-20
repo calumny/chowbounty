@@ -1,0 +1,83 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script type="text/javascript" src="{% static 'spin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.qrcode.min.js' %}"></script>
+    {{ form.media }}
+
+
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<title>Classic parallax page</title>
+
+    <script>
+          $(document).ready(function() {
+              $('#qrcode').qrcode("this plugin is great");
+          });
+    </script>
+</head>
+
+<body>
+    {% for bounty_item in bounty_items %}
+        <h3>{{ bounty_item.item_name }}</h3>
+        <h3>{{ bounty_item.item_quantity }}</h3>
+    {% endfor %}
+    <div id="qrcode"></div>
+    <form method="post" action="/some-url/">
+      {% csrf_token %}
+        
+                  <p><label for="id_world">World:</label> <style type="text/css">
+    #id_world_map { width: 1024px; height: 600px; }
+    #id_world_map .aligned label { float: inherit; }
+    #id_world_div_map { position: relative; vertical-align: top; float: left; }
+    #id_world { display: none; }
+    .olControlEditingToolbar .olControlModifyFeatureItemActive {
+        background-image: url("/static/admin/img/gis/move_vertex_on.png");
+        background-repeat: no-repeat;
+    }
+    .olControlEditingToolbar .olControlModifyFeatureItemInactive {
+        background-image: url("/static/admin/img/gis/move_vertex_off.png");
+        background-repeat: no-repeat;
+    }
+</style>
+
+<div id="id_world_div_map">
+    <div id="id_world_map"></div>
+    <span class="clear_features"><a href="javascript:geodjango_world.clearFeatures()">Delete all Features</a></span>
+    
+    <textarea id="id_world" class="vSerializedField required" cols="150" rows="10" name="world"></textarea>
+    <script type="text/javascript">
+        var map_options = {
+    maxExtend: new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508),
+    maxResolution: 156543.0339,
+    numZoomLevels: 20,
+    units: 'm'
+};
+        var options = {
+            geom_name: 'MultiPolygon',
+            id: 'id_world',
+            map_id: 'id_world_map',
+            map_options: map_options,
+            map_srid: 3857,
+            name: 'world'
+        };
+        
+options['scale_text'] = true;
+options['mouse_position'] = true;
+options['default_lon'] = 288.94;
+options['default_lat'] = 42.36;
+options['base_layer'] = new OpenLayers.Layer.OSM.Mapnik("OpenStreetMap (Mapnik)");
+
+        var geodjango_world = new MapWidget(options);
+    </script>
+</div>
+</p>
+
+    </form>
+</body>
