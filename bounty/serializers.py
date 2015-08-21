@@ -7,7 +7,7 @@ class BountyItemSerializer(serializers.ModelSerializer):
         fields = ('item_name', 'item_quantity')
 
 class BountySerializer(serializers.ModelSerializer):
-    cb_user = serializers.PrimaryKeyRelatedField(queryset=ChowBountyUser.objects.all())
+    cb_user = serializers.PrimaryKeyRelatedField(queryset=ChowBountyUser.objects.all(), required=False)
     
     class Meta:
         model = Bounty
