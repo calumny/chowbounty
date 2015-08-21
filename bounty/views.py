@@ -5,10 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django import template
+from django.utils.six import BytesIO
 
 import dateutil.parser
 
 import json
+
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
 register = template.Library()
 
@@ -21,7 +25,7 @@ from django.core import serializers
 from bounty.models import Bounty, BountyItem, ChowBountyUser
 #from bounty.forms import WorldBorderForm
 
-from bounty.serializers import BountySerializer
+from bounty.serializers import BountySerializer, BountyItemSerializer
 
 #from django.contrib.gis.geos import Point
 #from django.contrib.gis.measure import D
@@ -57,6 +61,24 @@ def rest_bounties_list(request):
         bounties = Bounty.objects.all()
         serializer = BountySerializer(bounties, many=True)
         return JSONResponse(serializer.data)
+
+@csrf_exempt
+@api_view(['POST'])
+def post_bounty(request):
+    if request.method == 'POST': 
+        serializer = BountySerializer(data=request.data)
+        if serializer.is_valid():
+            bounty = serializer.save()
+            for bountyitem in request.data['bountyitem_set']:
+                item_serializer = BountyItemSerializer(data = bountyitem)
+                if item_serializer.is_valid():
+                    item = item_serializer.save(bounty=bounty)
+            return HttpResponse(bounty.id)
+        else:
+            return HttpResponse(serializer.errors)
+    else:
+        return HttpResponse("No dice")
+        
 
 def local_bounties(request):
     miles = request.GET['miles']
