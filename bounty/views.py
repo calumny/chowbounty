@@ -67,8 +67,9 @@ def rest_bounties_list(request):
 def post_bounty(request):
     if request.method == 'POST': 
         serializer = BountySerializer(data=request.data)
+        cb_user = ChowBountyUser.objects.all()[0]
         if serializer.is_valid():
-            bounty = serializer.save()
+            bounty = serializer.save(cb_user=cb_user)
             for bountyitem in request.data['bountyitem_set']:
                 item_serializer = BountyItemSerializer(data = bountyitem)
                 if item_serializer.is_valid():
