@@ -56,18 +56,19 @@ def list_bounties(request):
     return render(request, 'bounty/localbounties.html', {})
 
 
+@api_view(['GET'])
 def rest_bounties_list(request):
     if request.method == 'GET':
-        bounties = Bounty.objects.all()
+        cb_user = ChowBountyUser.objects.get(user = request.user)
+        bounties = Bounty.objects.filter(cb_user = cb_user)
         serializer = BountySerializer(bounties, many=True)
         return JSONResponse(serializer.data)
 
-@csrf_exempt
 @api_view(['POST'])
 def post_bounty(request):
-    if request.method == 'POST': 
+    if request.method == 'POST' and request.user.is_authenticated: 
         serializer = BountySerializer(data=request.data)
-        cb_user = ChowBountyUser.objects.all()[0]
+        cb_user = ChowBountyUser.objects.get(user=request.user)
         if serializer.is_valid():
             bounty = serializer.save(cb_user=cb_user)
             for bountyitem in request.data['bountyitem_set']:

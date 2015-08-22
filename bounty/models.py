@@ -8,11 +8,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
-
 #from django.contrib.gis.geos import Point
 
 #from django.contrib.gis.db import models
@@ -127,3 +122,11 @@ class BountyItem(models.Model):
     bounty = models.ForeignKey(Bounty)
     image_link = models.CharField(max_length=200, default="")
     save_date = models.DateTimeField('date saved', default=datetime.now)
+    
+    
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+        ChowBountyUser.objects.create(user = instance)
