@@ -28,9 +28,9 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 ALLOWED_HOSTS = []
 
-GEOS_LIBRARY_PATH = 'C:/OSGeo4W64/bin/geos_c.dll'
+#GEOS_LIBRARY_PATH = 'C:/OSGeo4W64/bin/geos_c.dll'
 
-GDAL_LIBRARY_PATH = 'C:/OSGeo4W64/bin/gdal111.dll'
+#GDAL_LIBRARY_PATH = 'C:/OSGeo4W64/bin/gdal111.dll'
 
 # Application definition
 
@@ -43,7 +43,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'rest_framework',
+    'rest_framework.authtoken',
     'front',
+    'api',
     'bounty',
     'floppyforms',
 )
@@ -67,7 +69,7 @@ WSGI_APPLICATION = 'chowbounty.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 POSTGIS_VERSION = (2, 0, 3)
 
-GEOS_LIBRARY_PATH = "C:/OSGeo4W64/bin/geos_c.dll"
+#GEOS_LIBRARY_PATH = "C:/OSGeo4W64/bin/geos_c.dll"
 
 DATABASES = {
     'default': {

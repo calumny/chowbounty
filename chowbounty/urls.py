@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^front', include('front.urls', namespace="front")),
     url(r'^bounty', include('bounty.urls', namespace="bounty")),
+    url(r'^api', include('api.urls', namespace="api")),
     url(r'', include('front.urls', namespace="front")),
 
 )
