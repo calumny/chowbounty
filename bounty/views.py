@@ -57,6 +57,15 @@ def list_bounties(request):
 
 
 @api_view(['GET'])
+def rest_my_bounties(request):
+    if request.method == 'GET':
+        cb_user = ChowBountyUser.objects.get(user = request.user)
+        bounties = Bounty.objects.filter(cb_user = cb_user)
+        serializer = BountySerializer(bounties, many=True)
+        return JSONResponse(serializer.data)
+
+
+@api_view(['GET'])
 def rest_bounties_list(request):
     if request.method == 'GET':
         cb_user = ChowBountyUser.objects.get(user = request.user)
