@@ -48,6 +48,7 @@ TEMPLATES = [
 
                 # `allauth` needs this from django
                 'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
             ],
         },
     },
