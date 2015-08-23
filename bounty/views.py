@@ -22,7 +22,7 @@ from django.contrib.auth.models import User
 
 from django.core import serializers
 
-from bounty.models import Bounty, BountyItem, ChowBountyUser
+from bounty.models import Bounty, BountyItem, ChowBountyUser, BountyClaim
 #from bounty.forms import WorldBorderForm
 
 from bounty.serializers import BountySerializer, BountyItemSerializer
@@ -66,6 +66,17 @@ def rest_my_bounties(request):
 
 
 @api_view(['GET'])
+def rest_claimed_bounties(request):
+    if request.method == 'GET':
+        cb_user = ChowBountyUser.objects.get(user = request.user)
+        claims = BountyClaim.objects.filter(cb_user = cb_user, is_approved = True)
+        bounties  = Bounty.objects.filter(bountyclaim_set__in = claims)
+#        bounties = Bounty.objects.filter(cb_user = cb_user)
+        bounties = Bounty.objects.all()
+        serializer = BountySerializer(bounties, many=True)
+        return JSONResponse(serializer.data)
+
+@api_view(['GET'])
 def rest_bounties_list(request):
     if request.method == 'GET':
         cb_user = ChowBountyUser.objects.get(user = request.user)
@@ -73,6 +84,17 @@ def rest_bounties_list(request):
         bounties = Bounty.objects.all()
         serializer = BountySerializer(bounties, many=True)
         return JSONResponse(serializer.data)
+    
+@api_view(['POST'])
+def claim_bounty(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        data = request.data
+        bounty_id = data['id']
+        bounty = Bounty.objects.get(pk = bounty_id)
+        cb_user = ChowBountyUser.objects.get(user=request.user)
+        claim = BountyClaim(cb_user = cb_user, bounty = bounty, is_approved=True)
+        claim.save()
+        return HttpResponse(claim.id)
 
 @api_view(['POST'])
 def post_bounty(request):

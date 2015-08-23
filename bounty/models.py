@@ -124,6 +124,11 @@ class BountyItem(models.Model):
     save_date = models.DateTimeField('date saved', default=datetime.now)
     
     
+class BountyClaim(models.Model):
+    bounty = models.ForeignKey(Bounty)
+    cb_user = models.ForeignKey(ChowBountyUser)
+    is_approved = models.BooleanField(default = False)
+    
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
