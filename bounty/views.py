@@ -116,6 +116,24 @@ def post_bounty(request):
             return HttpResponse(serializer.errors)
     else:
         return HttpResponse("No dice")
+
+@api_view(['POST'])
+def update_bounty(request):
+    if request.method == 'POST' and request.user.is_authenticated: 
+        serializer = BountySerializer(data=request.data)
+        cb_user = ChowBountyUser.objects.get(user=request.user)
+        if serializer.is_valid():
+            bounty = serializer.save()
+            BountyItem.objects.filter(bounty = bounty).delete()
+            for bountyitem in request.data['bountyitem_set']:
+                item_serializer = BountyItemSerializer(data = bountyitem)
+                if item_serializer.is_valid():
+                    item = item_serializer.save(bounty=bounty)
+            return HttpResponse(bounty.id)
+        else:
+            return HttpResponse(serializer.errors)
+    else:
+        return HttpResponse("No dice")
         
 
 def local_bounties(request):

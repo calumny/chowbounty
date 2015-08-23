@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'/rest_bounties_list$', views.rest_bounties_list, name='rest_bounties_list'),
     url(r'/claim_bounty$', views.claim_bounty, name='claim_bounty'),
     url(r'/post_bounty$', views.post_bounty, name='post_bounty'),
+    url(r'/update_bounty$', views.update_bounty, name='update_bounty'),
     url(r'/(?P<bounty_id>.+)$', views.show_bounty, name='show_bounty'),
     url(r'$', views.list_bounties, name='list_bounties'),
 ]
