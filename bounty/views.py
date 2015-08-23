@@ -72,7 +72,7 @@ def rest_claimed_bounties(request):
         claims = BountyClaim.objects.filter(cb_user = cb_user, is_approved = True)
         bounties  = Bounty.objects.filter(bountyclaim_set__in = claims)
 #        bounties = Bounty.objects.filter(cb_user = cb_user)
-        bounties = Bounty.objects.all()
+#        bounties = Bounty.objects.all()
         serializer = BountySerializer(bounties, many=True)
         return JSONResponse(serializer.data)
 
@@ -92,7 +92,10 @@ def claim_bounty(request):
         bounty_id = data['id']
         bounty = Bounty.objects.get(pk = bounty_id)
         cb_user = ChowBountyUser.objects.get(user=request.user)
-        claim = BountyClaim(cb_user = cb_user, bounty = bounty, is_approved=True)
+        try:
+            claim = BountyClaim.objects.get(cb_user = cb_user, bounty = bounty)
+        except:
+            claim = BountyClaim(cb_user = cb_user, bounty = bounty, is_approved=True)
         claim.save()
         return HttpResponse(claim.id)
 
