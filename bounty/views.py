@@ -120,10 +120,14 @@ def post_bounty(request):
 @api_view(['POST'])
 def update_bounty(request):
     if request.method == 'POST' and request.user.is_authenticated: 
-        serializer = BountySerializer(data=request.data)
+        try:
+            bounty = Bounty.objects.get(pk=request.data['id'])
+        except Bounty.DoesNotExist:
+            return HttpResponse(status=404)
+        serializer = BountySerializer(bounty, data=request.data)
         cb_user = ChowBountyUser.objects.get(user=request.user)
         if serializer.is_valid():
-            bounty = serializer.save(cb_user = cb_user)
+            serializer.save()
             BountyItem.objects.filter(bounty = bounty).delete()
             for bountyitem in request.data['bountyitem_set']:
                 item_serializer = BountyItemSerializer(data = bountyitem)
