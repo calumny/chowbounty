@@ -70,7 +70,7 @@ def rest_claimed_bounties(request):
     if request.method == 'GET':
         cb_user = ChowBountyUser.objects.get(user = request.user)
         claims = BountyClaim.objects.filter(cb_user = cb_user, is_approved = True)
-        bounties  = Bounty.objects.filter(bountyclaim_set__in = claims)
+        bounties  = Bounty.objects.filter(bountyclaim__in = claims)
 #        bounties = Bounty.objects.filter(cb_user = cb_user)
 #        bounties = Bounty.objects.all()
         serializer = BountySerializer(bounties, many=True)
