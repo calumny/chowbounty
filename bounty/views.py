@@ -123,7 +123,7 @@ def update_bounty(request):
         serializer = BountySerializer(data=request.data)
         cb_user = ChowBountyUser.objects.get(user=request.user)
         if serializer.is_valid():
-            bounty = serializer.save()
+            bounty = serializer.save(cb_user = cb_user)
             BountyItem.objects.filter(bounty = bounty).delete()
             for bountyitem in request.data['bountyitem_set']:
                 item_serializer = BountyItemSerializer(data = bountyitem)
