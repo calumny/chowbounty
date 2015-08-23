@@ -80,8 +80,9 @@ def rest_claimed_bounties(request):
 def rest_bounties_list(request):
     if request.method == 'GET':
         cb_user = ChowBountyUser.objects.get(user = request.user)
+        claims = BountyClaim.objects.filter(cb_user = cb_user)
 #        bounties = Bounty.objects.filter(cb_user = cb_user)
-        bounties = Bounty.objects.all()
+        bounties  = Bounty.objects.filter(bountyclaim__in != claims)
         serializer = BountySerializer(bounties, many=True)
         return JSONResponse(serializer.data)
     
